@@ -2,6 +2,8 @@ Zerotier Central CLI
 
 Command Line Interface to my.zerotier.com
 
+**Note** This was forked in order to port from js to go. There will be some improvements to the original js version thought as well.
+
 Still experimenting with the commands/outputs.
 
 # Install
