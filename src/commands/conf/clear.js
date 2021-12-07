@@ -1,20 +1,20 @@
-const conf = require('../../conf.js')
+const conf = require("../../conf.js");
 
-const Command = require('../../base.js')
+const Command = require("../../base.js");
 
 class ClearCommand extends Command {
-  async init () {
-    this.conf = conf()
+  async init() {
+    this.conf = conf();
   }
 
-  async run () {
-    this.conf.clear()
-    this.log('cleared all config')
+  async run() {
+    this.conf.clear();
+    this.log("cleared all config");
   }
 }
 
-ClearCommand.description = 'clear all config'
+ClearCommand.description = "clear all config";
 
-ClearCommand.flags = {}
+ClearCommand.flags = {};
 
-module.exports = ClearCommand
+module.exports = ClearCommand;

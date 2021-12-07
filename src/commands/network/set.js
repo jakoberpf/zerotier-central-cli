@@ -1,74 +1,74 @@
-const assert = require('assert')
-const axios = require('axios').default
-const { flags } = require('@oclif/command')
+const assert = require("assert");
+const axios = require("axios").default;
+const { flags } = require("@oclif/command");
 
-const Command = require('../../api-base.js')
-const isIp = require('is-ip')
-const isCidr = require('is-cidr')
+const Command = require("../../api-base.js");
+const isIp = require("is-ip");
+const isCidr = require("is-cidr");
 
-const makeTable = require('../../network-table.js')
-const { Network } = require('../../network/network-object')
+const makeTable = require("../../network-table.js");
+const { Network } = require("../../network/network-object");
 
 class SetNetwork extends Command {
-  async run () {
-    const { flags } = this.parse(SetNetwork)
+  async run() {
+    const { flags } = this.parse(SetNetwork);
     const {
-      args: { networkId }
-    } = this.parse(SetNetwork)
+      args: { networkId },
+    } = this.parse(SetNetwork);
 
-    const newFlat = Network.fromObj(fromFlags(flags))
+    const newFlat = Network.fromObj(fromFlags(flags));
 
-    this.validate(newFlat)
+    this.validate(newFlat);
 
-    if (flags['dry-run']) {
-      return this.log(JSON.stringify(newFlat, 0, 2))
+    if (flags["dry-run"]) {
+      return this.log(JSON.stringify(newFlat, 0, 2));
     }
 
-    const req = this.central.networkUpdate(networkId)
-    const { data } = await axios({ ...req, data: newFlat })
-    const network = Network.fromJSON(data)
+    const req = this.central.networkUpdate(networkId);
+    const { data } = await axios({ ...req, data: newFlat });
+    const network = Network.fromJSON(data);
 
     if (flags.json) {
-      this.log(JSON.stringify(network, 0, 4))
+      this.log(JSON.stringify(network, 0, 4));
     } else {
-      this.log(makeTable([network], flags))
+      this.log(makeTable([network], flags));
     }
   }
 
-  validate (newFlat) {
+  validate(newFlat) {
     try {
       if (newFlat.ipAssignmentPools) {
         newFlat.ipAssignmentPools.forEach(({ ipRangeStart, ipRangeEnd }) => {
           assert(
             isIp(ipRangeStart),
-            'ipRangeStart should be an IP address. Got: ' + ipRangeStart
-          )
+            "ipRangeStart should be an IP address. Got: " + ipRangeStart
+          );
           assert(
             isIp(ipRangeEnd),
-            'ipRangeEnd should be an IP address, if defined. Got: ' + ipRangeEnd
-          )
-        })
+            "ipRangeEnd should be an IP address, if defined. Got: " + ipRangeEnd
+          );
+        });
       }
 
       if (newFlat.routes) {
         newFlat.routes.forEach(({ target, via }) => {
           assert(
             isCidr(target),
-            'Target subnet should be in CIDR notation. Got: ' + target
-          )
+            "Target subnet should be in CIDR notation. Got: " + target
+          );
           assert(
             isIp(via) || via == null,
-            'Via should be an IP Address. Got: ' + via
-          )
-        })
+            "Via should be an IP Address. Got: " + via
+          );
+        });
       }
     } catch (error) {
-      this.error(error.message)
+      this.error(error.message);
     }
   }
 }
 
-function fromFlags (flags) {
+function fromFlags(flags) {
   const {
     routes,
     description,
@@ -81,8 +81,8 @@ function fromFlags (flags) {
     v6AutoAssign: zt6,
     ip6plane,
     ip6prefix,
-    ipAssignmentPools
-  } = flags
+    ipAssignmentPools,
+  } = flags;
 
   return {
     routes,
@@ -96,16 +96,16 @@ function fromFlags (flags) {
     mtu,
     zt4,
     zt6,
-    ipAssignmentPools
-  }
+    ipAssignmentPools,
+  };
 }
 
-SetNetwork.description = 'change config'
-SetNetwork.args = [{ name: 'networkId', required: true }]
+SetNetwork.description = "change config";
+SetNetwork.args = [{ name: "networkId", required: true }];
 
 SetNetwork.flags = {
   ...Command.flags,
-  'dry-run': flags.boolean({ char: 'n' }),
+  "dry-run": flags.boolean({ char: "n" }),
   name: flags.string({ allowNo: false }),
   description: flags.string({ allowNo: false }),
 
@@ -121,26 +121,26 @@ SetNetwork.flags = {
   ip6prefix: flags.boolean({ allowNo: true }),
 
   ipAssignmentPools: flags.string({
-    description: '<rangeStart>-<rangeEnd> overwrites existing',
+    description: "<rangeStart>-<rangeEnd> overwrites existing",
     multiple: true,
-    parse: input => {
-      return [input.split('-')].reduce((acc, a) => {
-        return { ...acc, ipRangeStart: a[0], ipRangeEnd: a[1] }
-      }, {})
+    parse: (input) => {
+      return [input.split("-")].reduce((acc, a) => {
+        return { ...acc, ipRangeStart: a[0], ipRangeEnd: a[1] };
+      }, {});
     },
-    allowNo: false
+    allowNo: false,
   }),
   routes: flags.string({
-    description: '<target>[-via] overwrites existing. Can specify multiple',
+    description: "<target>[-via] overwrites existing. Can specify multiple",
     multiple: true,
-    parse: input => {
-      return [input.split('-')].reduce(
+    parse: (input) => {
+      return [input.split("-")].reduce(
         (acc, a) => ({ ...acc, target: a[0], via: a[1] }),
         {}
-      )
+      );
     },
-    allowNo: true
-  })
-}
+    allowNo: true,
+  }),
+};
 
-module.exports = SetNetwork
+module.exports = SetNetwork;

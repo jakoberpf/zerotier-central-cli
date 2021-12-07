@@ -1,23 +1,23 @@
-const tabtab = require('tabtab')
+const tabtab = require("tabtab");
 
-const Command = require('../../base.js')
+const Command = require("../../base.js");
 
 class UninstallCommand extends Command {
-  async run () {
+  async run() {
     // const {flags} = this.parse(UninstallCommand)
     await tabtab
       .uninstall({
-        name: 'ztc',
-        completer: 'ztc'
+        name: "ztc",
+        completer: "ztc",
       })
-      .catch(err => console.error('UNINSTALL ERROR', err))
+      .catch((err) => console.error("UNINSTALL ERROR", err));
   }
 }
 
-UninstallCommand.description = 'setup autocomplete'
+UninstallCommand.description = "setup autocomplete";
 
 UninstallCommand.flags = {
-  ...Command.flags
-}
+  ...Command.flags,
+};
 
-module.exports = UninstallCommand
+module.exports = UninstallCommand;

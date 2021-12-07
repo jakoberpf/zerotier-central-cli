@@ -1,59 +1,59 @@
 // const {inspect} = require('util')
-const omitEmpty = require('omit-empty')
+const omitEmpty = require("omit-empty");
 
 // writable
 const writable = [
-  'authorized',
-  'name',
-  'hidden',
-  'description',
-  'ipAssignments',
-  'activeBridge',
-  'capabilities',
-  'tags',
-  'noAutoAssignIps'
-]
+  "authorized",
+  "name",
+  "hidden",
+  "description",
+  "ipAssignments",
+  "activeBridge",
+  "capabilities",
+  "tags",
+  "noAutoAssignIps",
+];
 
-const readable = ['nodeId', 'networkId']
+const readable = ["nodeId", "networkId"];
 
 class Member {
-  constructor (m) {
+  constructor(m) {
     for (const p in m) {
       if (writable.concat(readable).includes(p)) {
-        this[p] = m[p]
+        this[p] = m[p];
       }
     }
   }
 
-  static fromObj (m = {}) {
-    return new Member(m)
+  static fromObj(m = {}) {
+    return new Member(m);
   }
 
-  no () {
-    const { nodeId, networkId, ...rest } = this.toJSON()
-    return rest
+  no() {
+    const { nodeId, networkId, ...rest } = this.toJSON();
+    return rest;
   }
 
-  static fromJSON (m = {}) {
-    return new Member(flatten(m))
+  static fromJSON(m = {}) {
+    return new Member(flatten(m));
   }
 
-  merge (that) {
+  merge(that) {
     // only values that are not undefined in `that` will be added
     // or overwritten from the orig network
-    return Member.fromObj({ ...this, ...omitEmpty(that) })
+    return Member.fromObj({ ...this, ...omitEmpty(that) });
   }
 
-  static keys () {
-    return writable
+  static keys() {
+    return writable;
   }
 
-  toJSON () {
-    return omitEmpty(nest(this))
+  toJSON() {
+    return omitEmpty(nest(this));
   }
 }
 
-function flatten (o) {
+function flatten(o) {
   const {
     nodeId,
     networkId,
@@ -66,9 +66,9 @@ function flatten (o) {
       activeBridge,
       capabilities,
       tags,
-      noAutoAssignIps
-    }
-  } = o
+      noAutoAssignIps,
+    },
+  } = o;
 
   return {
     nodeId,
@@ -81,11 +81,11 @@ function flatten (o) {
     activeBridge,
     capabilities,
     tags,
-    noAutoAssignIps
-  }
+    noAutoAssignIps,
+  };
 }
 
-function nest (o) {
+function nest(o) {
   const {
     nodeId,
     networkId,
@@ -97,8 +97,8 @@ function nest (o) {
     activeBridge,
     capabilities,
     tags,
-    noAutoAssignIps
-  } = o
+    noAutoAssignIps,
+  } = o;
 
   return {
     description,
@@ -113,9 +113,9 @@ function nest (o) {
       activeBridge,
       capabilities,
       tags,
-      noAutoAssignIps
-    }
-  }
+      noAutoAssignIps,
+    },
+  };
 }
 
-module.exports = { Member }
+module.exports = { Member };
