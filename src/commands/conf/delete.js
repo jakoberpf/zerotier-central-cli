@@ -1,36 +1,36 @@
-const conf = require('../../conf.js')
-const { flags } = require('@oclif/command')
+const conf = require("../../conf.js");
+const { flags } = require("@oclif/command");
 
-const Command = require('../../base.js')
+const Command = require("../../base.js");
 
 class DeleteCommand extends Command {
-  async init () {
-    this.conf = conf()
-    this.flags = this.parse(this.constructor).flags
+  async init() {
+    this.conf = conf();
+    this.flags = this.parse(this.constructor).flags;
   }
 
-  async run () {
-    const keys = Object.keys(this.flags)
+  async run() {
+    const keys = Object.keys(this.flags);
 
-    keys.forEach(flag => {
-      this.conf.delete(flag)
-    })
+    keys.forEach((flag) => {
+      this.conf.delete(flag);
+    });
 
     const o = keys.reduce((acc, el) => {
-      return { ...acc, [el]: this.conf.get(el) }
-    }, {})
+      return { ...acc, [el]: this.conf.get(el) };
+    }, {});
 
-    this.log(JSON.parse(JSON.stringify(o)))
+    this.log(JSON.parse(JSON.stringify(o)));
   }
 }
 
-DeleteCommand.description = 'delete key from config'
+DeleteCommand.description = "delete key from config";
 
 DeleteCommand.flags = {
   token: flags.boolean(),
-  'api-base': flags.boolean(),
+  "api-base": flags.boolean(),
   memberIds: flags.boolean(),
-  networkIds: flags.boolean()
-}
+  networkIds: flags.boolean(),
+};
 
-module.exports = DeleteCommand
+module.exports = DeleteCommand;

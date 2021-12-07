@@ -1,71 +1,71 @@
 // const {inspect} = require('util')
-const omitEmpty = require('omit-empty')
+const omitEmpty = require("omit-empty");
 
 // writable
 const writable = [
-  'ipAssignmentPools',
-  'enableBroadcast',
-  'multicastLimit',
-  'capabilities',
-  'permissions',
-  'description',
-  'rulesSource',
-  'rfc4193',
-  'private',
-  'routes',
-  'rules',
-  'ip6plane',
-  'name',
-  'tags',
-  'name',
-  'mtu',
-  'zt4',
-  'zt6'
-]
+  "ipAssignmentPools",
+  "enableBroadcast",
+  "multicastLimit",
+  "capabilities",
+  "permissions",
+  "description",
+  "rulesSource",
+  "rfc4193",
+  "private",
+  "routes",
+  "rules",
+  "ip6plane",
+  "name",
+  "tags",
+  "name",
+  "mtu",
+  "zt4",
+  "zt6",
+];
 
 const readable = [
-  'id',
-  'creationTime',
-  'lastModified',
-  'totalMemberCount',
-  'onlineMemberCount',
-  'authorizedMemberCount',
-  'ownerId'
-]
+  "id",
+  "creationTime",
+  "lastModified",
+  "totalMemberCount",
+  "onlineMemberCount",
+  "authorizedMemberCount",
+  "ownerId",
+];
 
 class Network {
-  constructor (n) {
+  constructor(n) {
     for (const p in n) {
       if (writable.concat(readable).includes(p)) {
-        this[p] = n[p]
+        this[p] = n[p];
       }
     }
   }
 
-  static fromObj (n = {}) {
-    return new Network(n)
+  static fromObj(n = {}) {
+    return new Network(n);
   }
 
-  static fromJSON (n = {}) {
-    return new Network(flatten(n))
+  static fromJSON(n = {}) {
+    return new Network(flatten(n));
   }
 
-  merge (that) {
+  merge(that) {
     // only values that are not undefined in `that` will be added
     // or overwritten from the orig network
-    return Network.fromObj({ ...this, ...omitEmpty(that) })
+    return Network.fromObj({ ...this, ...omitEmpty(that) });
   }
 
-  static keys () {
-    return writable
+  static keys() {
+    return writable;
   }
 
-  toJSON () {
-    return omitEmpty(nest(this))
+  toJSON() {
+    return omitEmpty(nest(this));
   }
 }
 
-function nest (o) {
+function nest(o) {
   const {
     ipAssignmentPools,
     enableBroadcast,
@@ -85,8 +85,8 @@ function nest (o) {
     mtu,
     zt4,
     zt6,
-    id
-  } = o
+    id,
+  } = o;
 
   return {
     description,
@@ -106,19 +106,19 @@ function nest (o) {
       name,
       mtu,
       v4AssignMode: { zt: zt4 },
-      v6AssignMode: { zt: zt6, '6plane': ip6plane, rfc4193 }
-    }
-  }
+      v6AssignMode: { zt: zt6, "6plane": ip6plane, rfc4193 },
+    },
+  };
 }
 
-function flatten (o) {
+function flatten(o) {
   const {
     id,
-    description = '',
-    rulesSource = '',
+    description = "",
+    rulesSource = "",
     permissions = {},
 
-    ownerId = '',
+    ownerId = "",
     totalMemberCount = 0,
     onlineMemberCount = 0,
     authorizedMemberCount = 0,
@@ -130,16 +130,16 @@ function flatten (o) {
       private: priv,
       routes = [],
       rules = [],
-      name = '',
+      name = "",
       tags = [],
       mtu,
       v4AssignMode: { zt: zt4 } = {},
-      v6AssignMode: { zt: zt6, rfc4193, '6plane': ip6plane } = {},
+      v6AssignMode: { zt: zt6, rfc4193, "6plane": ip6plane } = {},
 
       creationTime = 0,
-      lastModified = 0
-    } = {}
-  } = o
+      lastModified = 0,
+    } = {},
+  } = o;
 
   return {
     ipAssignmentPools,
@@ -166,8 +166,8 @@ function flatten (o) {
     lastModified,
     totalMemberCount,
     onlineMemberCount,
-    authorizedMemberCount
-  }
+    authorizedMemberCount,
+  };
 }
 
-module.exports = { Network }
+module.exports = { Network };

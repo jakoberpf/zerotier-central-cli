@@ -1,23 +1,23 @@
-const tabtab = require('tabtab')
+const tabtab = require("tabtab");
 
-const Command = require('../../base.js')
+const Command = require("../../base.js");
 
 class InstallCommand extends Command {
-  async run () {
+  async run() {
     // const {flags} = this.parse(InstallCommand)
     await tabtab
       .install({
-        name: 'ztc',
-        completer: 'ztc'
+        name: "ztc",
+        completer: "ztc",
       })
-      .catch(err => console.error('INSTALL ERROR', err))
+      .catch((err) => console.error("INSTALL ERROR", err));
   }
 }
 
-InstallCommand.description = 'setup autocomplete'
+InstallCommand.description = "setup autocomplete";
 
 InstallCommand.flags = {
-  ...Command.flags
-}
+  ...Command.flags,
+};
 
-module.exports = InstallCommand
+module.exports = InstallCommand;

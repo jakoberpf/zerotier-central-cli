@@ -1,14 +1,14 @@
-const { Command, flags } = require('@oclif/command')
+const { Command, flags } = require("@oclif/command");
 
-const conf = require('./conf.js')
+const conf = require("./conf.js");
 
 class Base extends Command {
-  async init () {
-    this.flags = flags
-    this.conf = conf()
+  async init() {
+    this.flags = flags;
+    this.conf = conf();
   }
 }
 
-Base.strict = false
+Base.strict = false;
 
-module.exports = Base
+module.exports = Base;

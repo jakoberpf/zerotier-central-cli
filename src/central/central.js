@@ -1,3 +1,3 @@
-const _central = require('@laduke/zerotier-central-client')
+const _central = require("@laduke/zerotier-central-client");
 
-module.exports = _central
+module.exports = _central;
